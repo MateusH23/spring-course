@@ -1,5 +1,6 @@
 package com.example.springcourse.domain;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -29,7 +30,9 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-public class Request {
+public class Request implements Serializable {
+	
+	private static final long serialVersionUID = 1L;
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
