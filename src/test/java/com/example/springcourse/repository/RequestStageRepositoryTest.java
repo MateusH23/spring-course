@@ -44,10 +44,10 @@ public class RequestStageRepositoryTest {
 	}
 	
 	@Test
-	public void findAllRequestStageTest() {
-		List<RequestStage> requestStages = requestStageRepository.findAll();
+	public void findAllByRequestStageIdTest() {
+		Optional<List<RequestStage>> requestStages = requestStageRepository.findAllByRequestId(1L);
 		
-		assertThat(requestStages.size()).isEqualTo(1);
+		assertThat(requestStages.get().size()).isEqualTo(1);
 	}
 
 }
