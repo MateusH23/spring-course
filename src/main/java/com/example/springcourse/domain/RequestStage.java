@@ -42,6 +42,10 @@ public class RequestStage implements Serializable {
 	@Column(columnDefinition = "text", nullable = false)
 	private String description;
 	
+	@Column(length = 50, nullable = false)
+	@Enumerated(EnumType.STRING)
+	private RequestState state;
+	
 	@ManyToOne
 	@JoinColumn(name = "owner_id", nullable = false)
 	private User owner;
@@ -49,9 +53,5 @@ public class RequestStage implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "request_id", nullable = false)
 	private Request request;
-	
-	@Column(length = 50, nullable = false)
-	@Enumerated(EnumType.STRING)
-	private RequestState state;
 
 }

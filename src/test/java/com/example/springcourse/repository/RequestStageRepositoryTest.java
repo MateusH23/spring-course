@@ -29,7 +29,7 @@ public class RequestStageRepositoryTest {
 		Request request = new Request();
 		request.setId(1L);
 		
-		RequestStage createdRequest = requestStageRepository.save(new RequestStage(null, new Date(), "Compra de novo notebook gamer efetuada.", owner, request, RequestState.CLOSED));
+		RequestStage createdRequest = requestStageRepository.save(new RequestStage(null, new Date(), "Compra de novo notebook gamer efetuada.", RequestState.CLOSED, owner, request));
 		
 		assertThat(createdRequest.getId()).isEqualTo(1L);
 	}
