@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.springcourse.domain.User;
+import com.example.springcourse.exception.NotFoundException;
 import com.example.springcourse.repository.UserRepository;
 import com.example.springcourse.service.util.HashUtil;
 
@@ -39,7 +40,7 @@ public class UserService {
 	public User getUserById(Long id) {
 		Optional<User> result = userRepository.findById(id);
 
-		return result.get();
+		return result.orElseThrow(() -> new NotFoundException("There are no user with id " + id));
 	}
 
 	public List<User> getAllUser() {
@@ -54,7 +55,7 @@ public class UserService {
 
 		Optional<User> loggedUser = userRepository.login(email, password);
 
-		return loggedUser.get();
+		return loggedUser.orElseThrow(() -> new NotFoundException("There are no user with these credentials"));
 	}
 
 }
