@@ -13,8 +13,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.springcourse.domain.Request;
 import com.example.springcourse.domain.User;
 import com.example.springcourse.dto.UserLoginDTO;
+import com.example.springcourse.service.RequestService;
 import com.example.springcourse.service.UserService;
 
 @RestController
@@ -23,6 +25,9 @@ public class UserResource {
 	
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private RequestService requestService;
 	
 	@PostMapping
 	public ResponseEntity<User> create(@RequestBody User user) {
@@ -54,6 +59,12 @@ public class UserResource {
 	public ResponseEntity<User> login(@RequestBody UserLoginDTO userLoginDTO) {
 		User user = userService.login(userLoginDTO.getEmail(), userLoginDTO.getPassword());
 		return ResponseEntity.ok(user);
+	}
+	
+	@GetMapping("/{id}/requests")
+	public ResponseEntity<List<Request>> getAllRequestById(@PathVariable("id") Long id) {
+		List<Request> requests = requestService.getAllRequestByOwnerId(id);
+		return ResponseEntity.ok(requests);
 	}
 
 }
