@@ -22,7 +22,7 @@ public class UserRepositoryTest {
 	@Autowired
 	private UserRepository userRepository;
 
-	@BeforeAll
+	/*@BeforeAll
 	@Test
 	public void createUserTest() {
 		User createdUser = userRepository
@@ -66,14 +66,21 @@ public class UserRepositoryTest {
 
 			assertThat(loggedUser.getId()).isEqualTo(1L);
 		}
-	}
+	}*/
 
+//	@Test
+//	public void updateRoleUserTest() {
+//		User updatedRoleUser = userRepository
+//				.save(new User(1L, "Mateus Hernani", "mateus@email.com", "mat123", Role.SIMPLE, null, null));
+//
+//		assertThat(updatedRoleUser.getRole()).isEqualTo(Role.SIMPLE);
+//	}
+	
 	@Test
-	public void updateRoleUserTest() {
-		User updatedRoleUser = userRepository
-				.save(new User(1L, "Mateus Hernani", "mateus@email.com", "mat123", Role.SIMPLE, null, null));
-
-		assertThat(updatedRoleUser.getRole()).isEqualTo(Role.SIMPLE);
+	public void updateRoleTest() {
+		int affectedRows = userRepository.updateRole(7L, Role.ADMINISTRATOR);
+		
+		assertThat(affectedRows).isEqualTo(1);
 	}
 
 }

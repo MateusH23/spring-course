@@ -71,5 +71,9 @@ public class UserService {
 				pageUser.getTotalPages(), pageUser.getContent());
 		return users;
 	}
+	
+	public void updateRole(User user) {
+		userRepository.updateRole(user.getId(), user.getRole());
+	}
 
 }
