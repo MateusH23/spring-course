@@ -57,7 +57,8 @@ public class UserResource {
 //	}
 
 	@GetMapping
-	public ResponseEntity<PageModel<User>> findAll(@RequestParam("page") int page, @RequestParam("size") int size) {
+	public ResponseEntity<PageModel<User>> findAll(@RequestParam(value = "page", defaultValue = "0") int page,
+			@RequestParam(value = "size", defaultValue = "10") int size) {
 		PageRequestModel pr = new PageRequestModel(page, size);
 		PageModel<User> users = userService.listAllOnLazyMode(pr);
 		return ResponseEntity.ok(users);
@@ -77,7 +78,8 @@ public class UserResource {
 
 	@GetMapping("/{id}/requests")
 	public ResponseEntity<PageModel<Request>> getAllRequestById(@PathVariable("id") Long id,
-			@RequestParam("page") int page, @RequestParam("size") int size) {
+			@RequestParam(value = "page", defaultValue = "0") int page,
+			@RequestParam(value = "size", defaultValue = "10") int size) {
 		PageRequestModel pr = new PageRequestModel(page, size);
 		PageModel<Request> requests = requestService.getAllRequestByOwnerIdOnLazyMode(id, pr);
 
