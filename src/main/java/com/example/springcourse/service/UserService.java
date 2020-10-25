@@ -4,10 +4,15 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.example.springcourse.domain.User;
 import com.example.springcourse.exception.NotFoundException;
+import com.example.springcourse.model.PageModel;
+import com.example.springcourse.model.PageRequestModel;
 import com.example.springcourse.repository.UserRepository;
 import com.example.springcourse.service.util.HashUtil;
 
@@ -56,6 +61,15 @@ public class UserService {
 		Optional<User> loggedUser = userRepository.login(email, password);
 
 		return loggedUser.orElseThrow(() -> new NotFoundException("There are no user with these credentials"));
+	}
+
+	public PageModel<User> listAllOnLazyMode(PageRequestModel pr) {
+		Pageable pageable = PageRequest.of(pr.getPage(), pr.getSize());
+		Page<User> pageUser = userRepository.findAll(pageable);
+
+		PageModel<User> users = new PageModel<>((int) pageUser.getTotalElements(), pageUser.getSize(),
+				pageUser.getTotalPages(), pageUser.getContent());
+		return users;
 	}
 
 }
