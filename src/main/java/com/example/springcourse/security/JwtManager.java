@@ -3,10 +3,13 @@ package com.example.springcourse.security;
 import java.util.Calendar;
 import java.util.List;
 
+import org.springframework.stereotype.Component;
+
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.example.springcourse.constants.SecurityConstants;
 
+@Component
 public class JwtManager {
 
 	public String createToken(String email, List<String> roles) {
