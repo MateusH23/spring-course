@@ -1,5 +1,8 @@
 package com.example.springcourse.resource;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +30,7 @@ import com.example.springcourse.dto.UserUpdateDTO;
 import com.example.springcourse.dto.UserUpdateRoleDTO;
 import com.example.springcourse.model.PageModel;
 import com.example.springcourse.model.PageRequestModel;
+import com.example.springcourse.security.JwtManager;
 import com.example.springcourse.service.RequestService;
 import com.example.springcourse.service.UserService;
 
@@ -39,9 +43,12 @@ public class UserResource {
 
 	@Autowired
 	private RequestService requestService;
-	
+
 	@Autowired
 	private AuthenticationManager authManager;
+
+	@Autowired
+	private JwtManager jwtManager;
 
 	@PostMapping
 	public ResponseEntity<User> create(@RequestBody @Valid UserSaveDTO userDTO) {
@@ -80,13 +87,23 @@ public class UserResource {
 	}
 
 	@PostMapping("/login")
-	public ResponseEntity<User> login(@RequestBody @Valid UserLoginDTO userLoginDTO) {
-		UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(userLoginDTO.getEmail(), userLoginDTO.getPassword());
+	public ResponseEntity<String> login(@RequestBody @Valid UserLoginDTO userLoginDTO) {
+		UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(userLoginDTO.getEmail(),
+				userLoginDTO.getPassword());
 		Authentication auth = authManager.authenticate(token);
-		
+
 		SecurityContextHolder.getContext().setAuthentication(auth);
+
+		org.springframework.security.core.userdetails.User userSpring = 
+				(org.springframework.security.core.userdetails.User) auth.getPrincipal();
 		
-		return ResponseEntity.ok(null);
+		String email = userSpring.getUsername();
+		
+		List<String> roles = userSpring.getAuthorities().stream().map(authority -> authority.getAuthority()).collect(Collectors.toList());
+		
+		String jwt = jwtManager.createToken(email, roles);
+
+		return ResponseEntity.ok(jwt);
 	}
 
 //	@GetMapping("/{id}/requests")
@@ -104,14 +121,14 @@ public class UserResource {
 
 		return ResponseEntity.ok(requests);
 	}
-	
+
 	@PatchMapping("/{id}/role")
 	public ResponseEntity<?> updateRole(@PathVariable("id") Long id, @RequestBody @Valid UserUpdateRoleDTO userDTO) {
 		User user = new User();
 		user.setId(id);
 		user.setRole(userDTO.getRole());
 		userService.updateRole(user);
-		
+
 		return ResponseEntity.ok().build();
 	}
 
