@@ -1,5 +1,6 @@
 package com.example.springcourse.resource.exception;
 
+import java.nio.file.AccessDeniedException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -29,6 +30,12 @@ public class ResourceExceptionHandler extends ResponseEntityExceptionHandler{
 	public ResponseEntity<ApiError> badCredentialsExceptionHandler(BadCredentialsException ex) {
 		ApiError error = new ApiError(HttpStatus.UNAUTHORIZED.value(), ex.getMessage(), new Date());
 		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error);
+	}
+	
+	@ExceptionHandler(AccessDeniedException.class)
+	public ResponseEntity<ApiError> accessDeniedExceptionHandler(AccessDeniedException ex) {
+		ApiError apiError = new ApiError(HttpStatus.FORBIDDEN.value(), ex.getMessage(), new Date());
+		return ResponseEntity.status(HttpStatus.FORBIDDEN).body(apiError);
 	}
 	
 	@Override
