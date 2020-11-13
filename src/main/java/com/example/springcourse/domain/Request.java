@@ -32,33 +32,37 @@ import lombok.Setter;
 @Setter
 @Entity
 public class Request implements Serializable {
-	
+
 	private static final long serialVersionUID = 1L;
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
+
 	@Column(length = 75, nullable = false)
 	private String subject;
-	
+
 	@Column(columnDefinition = "text", nullable = false)
 	private String description;
-	
+
 	@Column(name = "creation_date", nullable = false, updatable = false)
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date creationDate;
-	
+
 	@Column(length = 50, nullable = false)
 	@Enumerated(EnumType.STRING)
 	private RequestState state;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "owner_id", nullable = false)
 	private User owner;
-	
-	@Getter(onMethod = @__({@JsonIgnore}))
+
+	@Getter(onMethod = @__({ @JsonIgnore }))
 	@OneToMany(mappedBy = "request")
 	private List<RequestStage> stages = new ArrayList<>();
+
+	@Getter(onMethod = @__({ @JsonIgnore }))
+	@OneToMany(mappedBy = "request")
+	private List<RequestFile> files = new ArrayList<>();
 
 }
