@@ -7,6 +7,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 import com.example.springcourse.domain.Request;
+import com.example.springcourse.domain.RequestFile;
 import com.example.springcourse.domain.RequestStage;
 import com.example.springcourse.domain.User;
 import com.example.springcourse.domain.enums.RequestState;
@@ -28,9 +29,10 @@ public class RequestUpdateDTO {
 	@NotNull(message = "Owner is required")
 	private User owner;
 	private List<RequestStage> stages = new ArrayList<>();
+	private List<RequestFile> files = new ArrayList<>();
 	
 	public Request transformToRequest() {
-		return new Request(null, subject, description, null, state, owner, stages);
+		return new Request(null, subject, description, null, state, owner, stages, files);
 	}
 
 }

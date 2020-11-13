@@ -24,7 +24,7 @@ public class RequestRepositoryTest {
 	public void aCreateRequestTest() {
 		User owner = new User();
 		owner.setId(1L);
-		Request request = new Request(null, "Acer Predator Helios 300", "Comprando um notebook gamer", new Date(), RequestState.OPEN, owner, null);
+		Request request = new Request(null, "Acer Predator Helios 300", "Comprando um notebook gamer", new Date(), RequestState.OPEN, owner, null, null);
 		
 		Request createdRequest = requestRepository.save(request);
 		
@@ -35,7 +35,7 @@ public class RequestRepositoryTest {
 	public void updateRequestTest() {
 		User owner = new User();
 		owner.setId(1L);
-		Request request = new Request(1L, "Acer Predator Helios 300 Ci7 16 GB GTX 1660TI", "Comprando um notebook gamer", null, RequestState.OPEN, owner, null);
+		Request request = new Request(1L, "Acer Predator Helios 300 Ci7 16 GB GTX 1660TI", "Comprando um notebook gamer", null, RequestState.OPEN, owner, null, null);
 		
 		Request updatedRequest = requestRepository.save(request);
 		

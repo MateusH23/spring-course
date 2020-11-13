@@ -26,7 +26,7 @@ public class RequestSaveDTO {
 	private List<RequestStage> stages = new ArrayList<>();
 	
 	public Request transformToRequest() {
-		return new Request(null, subject, description, null, null, owner, stages);
+		return new Request(null, subject, description, null, null, owner, stages, null);
 	}
 
 }
