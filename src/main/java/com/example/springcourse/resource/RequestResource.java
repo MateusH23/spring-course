@@ -97,20 +97,22 @@ public class RequestResource {
 	}
 
 	@GetMapping("/{id}/files")
-	public ResponseEntity<PageModel<RequestFile>> getAllByRequestId(@PathVariable("id") Long id,
-			@RequestParam("page") int page, @RequestParam("size") int size) {
+	public ResponseEntity<PageModel<RequestFile>> getAllFilesByRequestId(@PathVariable("id") Long id,
+			@RequestParam(value = "page", defaultValue = "0") int page,
+			@RequestParam(value = "size", defaultValue = "10") int size) {
 		PageRequestModel pm = new PageRequestModel(page, size);
 
 		PageModel<RequestFile> pageModel = fileService.findAllByRequestId(id, pm);
 
 		return ResponseEntity.ok(pageModel);
 	}
-	
+
 	@PostMapping("/{id}/files")
-	public ResponseEntity<List<RequestFile>> upload(@PathVariable("id") Long id, @RequestParam("files") MultipartFile[] files) {
-		
+	public ResponseEntity<List<RequestFile>> upload(@PathVariable("id") Long id,
+			@RequestParam("files") MultipartFile[] files) {
+
 		List<RequestFile> requestFiles = fileService.upload(id, files);
-		
+
 		return ResponseEntity.status(HttpStatus.CREATED).body(requestFiles);
 	}
 
