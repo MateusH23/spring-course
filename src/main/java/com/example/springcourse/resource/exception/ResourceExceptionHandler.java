@@ -13,6 +13,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import com.example.springcourse.exception.NotFoundException;
@@ -36,6 +37,16 @@ public class ResourceExceptionHandler extends ResponseEntityExceptionHandler{
 	public ResponseEntity<ApiError> accessDeniedExceptionHandler(AccessDeniedException ex) {
 		ApiError apiError = new ApiError(HttpStatus.FORBIDDEN.value(), ex.getMessage(), new Date());
 		return ResponseEntity.status(HttpStatus.FORBIDDEN).body(apiError);
+	}
+	
+	//MaxUploadSizeExceededException
+	@ExceptionHandler(MaxUploadSizeExceededException.class)
+	public ResponseEntity<ApiError> maxUploadSizeExceededExceptionHandler(MaxUploadSizeExceededException ex) {
+		String parts[] = ex.getMessage().split(":");
+		String msg = parts[parts.length - 1].trim().toUpperCase();
+		
+		ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST.value(), msg, new Date());
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiError);
 	}
 	
 	@Override
