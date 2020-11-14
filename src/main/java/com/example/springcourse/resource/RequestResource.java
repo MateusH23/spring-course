@@ -1,5 +1,7 @@
 package com.example.springcourse.resource;
 
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,13 +16,16 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.example.springcourse.domain.Request;
+import com.example.springcourse.domain.RequestFile;
 import com.example.springcourse.domain.RequestStage;
 import com.example.springcourse.dto.RequestSaveDTO;
 import com.example.springcourse.dto.RequestUpdateDTO;
 import com.example.springcourse.model.PageModel;
 import com.example.springcourse.model.PageRequestModel;
+import com.example.springcourse.service.RequestFileService;
 import com.example.springcourse.service.RequestService;
 import com.example.springcourse.service.RequestStageService;
 
@@ -33,7 +38,10 @@ public class RequestResource {
 
 	@Autowired
 	private RequestStageService stageService;
-	
+
+	@Autowired
+	private RequestFileService fileService;
+
 	@PostMapping
 	public ResponseEntity<Request> create(@RequestBody @Valid RequestSaveDTO requestDTO) {
 		Request request = requestDTO.transformToRequest();
@@ -43,7 +51,8 @@ public class RequestResource {
 
 	@PreAuthorize("@accessManager.isRequestOwner(#id)")
 	@PutMapping("/{id}")
-	public ResponseEntity<Request> update(@PathVariable("id") Long id, @RequestBody @Valid RequestUpdateDTO requestDTO) {
+	public ResponseEntity<Request> update(@PathVariable("id") Long id,
+			@RequestBody @Valid RequestUpdateDTO requestDTO) {
 		Request request = requestDTO.transformToRequest();
 		request.setId(id);
 		Request updatedRequest = requestService.updateRequest(request);
@@ -85,6 +94,24 @@ public class RequestResource {
 		PageModel<RequestStage> pageRequest = stageService.getAllRequestStageByRequestIdOnLazyMode(id, pr);
 
 		return ResponseEntity.ok(pageRequest);
+	}
+
+	@GetMapping("/{id}/files")
+	public ResponseEntity<PageModel<RequestFile>> getAllByRequestId(@PathVariable("id") Long id,
+			@RequestParam("page") int page, @RequestParam("size") int size) {
+		PageRequestModel pm = new PageRequestModel(page, size);
+
+		PageModel<RequestFile> pageModel = fileService.findAllByRequestId(id, pm);
+
+		return ResponseEntity.ok(pageModel);
+	}
+	
+	@PostMapping("/{id}/files")
+	public ResponseEntity<List<RequestFile>> upload(@PathVariable("id") Long id, @RequestParam("files") MultipartFile[] files) {
+		
+		List<RequestFile> requestFiles = fileService.upload(id, files);
+		
+		return ResponseEntity.status(HttpStatus.CREATED).body(requestFiles);
 	}
 
 }
