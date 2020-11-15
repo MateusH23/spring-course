@@ -1,6 +1,7 @@
 package com.example.springcourse.resource;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import javax.validation.Valid;
@@ -85,9 +86,8 @@ public class UserResource {
 //	}
 
 	@GetMapping
-	public ResponseEntity<PageModel<User>> findAll(@RequestParam(value = "page", defaultValue = "0") int page,
-			@RequestParam(value = "size", defaultValue = "10") int size) {
-		PageRequestModel pr = new PageRequestModel(page, size);
+	public ResponseEntity<PageModel<User>> findAll(@RequestParam Map<String, String> params) {
+		PageRequestModel pr = new PageRequestModel(params);
 		PageModel<User> users = userService.listAllOnLazyMode(pr);
 		return ResponseEntity.ok(users);
 	}
@@ -120,9 +120,8 @@ public class UserResource {
 
 	@GetMapping("/{id}/requests")
 	public ResponseEntity<PageModel<Request>> getAllRequestById(@PathVariable("id") Long id,
-			@RequestParam(value = "page", defaultValue = "0") int page,
-			@RequestParam(value = "size", defaultValue = "10") int size) {
-		PageRequestModel pr = new PageRequestModel(page, size);
+			@RequestParam Map<String, String> params) {
+		PageRequestModel pr = new PageRequestModel(params);
 		PageModel<Request> requests = requestService.getAllRequestByOwnerIdOnLazyMode(id, pr);
 
 		return ResponseEntity.ok(requests);

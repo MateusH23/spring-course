@@ -1,6 +1,7 @@
 package com.example.springcourse.resource;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.validation.Valid;
 
@@ -78,9 +79,8 @@ public class RequestResource {
 //	}
 
 	@GetMapping
-	public ResponseEntity<PageModel<Request>> listAll(@RequestParam(value = "page", defaultValue = "0") int page,
-			@RequestParam(value = "size", defaultValue = "10") int size) {
-		PageRequestModel pr = new PageRequestModel(page, size);
+	public ResponseEntity<PageModel<Request>> listAll(@RequestParam Map<String, String> params) {
+		PageRequestModel pr = new PageRequestModel(params);
 		PageModel<Request> requests = requestService.getAllRequestOnLazyMode(pr);
 
 		return ResponseEntity.ok(requests);
@@ -88,9 +88,8 @@ public class RequestResource {
 
 	@GetMapping("/{id}/stages")
 	public ResponseEntity<PageModel<RequestStage>> getAllStageById(@PathVariable("id") Long id,
-			@RequestParam(value = "page", defaultValue = "0") int page,
-			@RequestParam(value = "size", defaultValue = "10") int size) {
-		PageRequestModel pr = new PageRequestModel(page, size);
+			@RequestParam Map<String, String> params) {
+		PageRequestModel pr = new PageRequestModel(params);
 		PageModel<RequestStage> pageRequest = stageService.getAllRequestStageByRequestIdOnLazyMode(id, pr);
 
 		return ResponseEntity.ok(pageRequest);
@@ -98,9 +97,8 @@ public class RequestResource {
 
 	@GetMapping("/{id}/files")
 	public ResponseEntity<PageModel<RequestFile>> getAllFilesByRequestId(@PathVariable("id") Long id,
-			@RequestParam(value = "page", defaultValue = "0") int page,
-			@RequestParam(value = "size", defaultValue = "10") int size) {
-		PageRequestModel pm = new PageRequestModel(page, size);
+			@RequestParam Map<String, String> params) {
+		PageRequestModel pm = new PageRequestModel(params);
 
 		PageModel<RequestFile> pageModel = fileService.findAllByRequestId(id, pm);
 
