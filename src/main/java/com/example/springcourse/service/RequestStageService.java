@@ -6,7 +6,6 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -53,7 +52,7 @@ public class RequestStageService {
 	}
 
 	public PageModel<RequestStage> getAllRequestStageByRequestIdOnLazyMode(Long id, PageRequestModel pr) {
-		Pageable pageable = PageRequest.of(pr.getPage(), pr.getSize());
+		Pageable pageable = pr.toSpringPageRequest();
 		Page<RequestStage> pageRequestStage = requestStageRepository.findAllByRequestId(id, pageable);
 		PageModel<RequestStage> requestStages = new PageModel<>((int) pageRequestStage.getTotalElements(),
 				pageRequestStage.getSize(), pageRequestStage.getTotalPages(), pageRequestStage.getContent());

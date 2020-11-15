@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -43,7 +42,7 @@ public class RequestFileService {
 	}
 	
 	public PageModel<RequestFile> findAllByRequestId(Long id, PageRequestModel prm) {
-		Pageable pageable = PageRequest.of(prm.getPage(), prm.getSize());
+		Pageable pageable = prm.toSpringPageRequest();
 		Page<RequestFile> page = fileRepository.findAllByRequestId(id, pageable);
 		
 		PageModel<RequestFile> pageModel = new PageModel<>((int)page.getTotalElements(), page.getSize(), page.getTotalPages(), page.getContent());
